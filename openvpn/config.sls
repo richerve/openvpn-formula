@@ -9,14 +9,16 @@ include:
 
 # If the os is using systemd, then each openvpn config has its own service
 # e.g for office.conf -> openvpn@office
-{% if salt['grains.has_value']('systemd') %}
+{%- if config.config_type is defined and config.config_type != "profileonly" %}
+{%- if salt['grains.has_value']('systemd') %}
 openvpn_{{name}}_service:
   service.running:
     - name: {{ 'openvpn@' ~ name }}
     - enable: True
     - require:
       - pkg: openvpn_pkgs
-{% endif %}
+{%- endif %}
+{%- endif %}
 
 # Deploy {{ type }} {{ name }} config files
 openvpn_config_{{ type }}_{{ name }}:

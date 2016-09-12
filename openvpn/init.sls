@@ -21,6 +21,7 @@ openvpn_create_dh_{{ dh }}:
 
 # Ensure openvpn service is running and autostart is enabled
 # If OS is running systemd then not use this generic service
+{% if config.config_type is defined and config.config_type != "profileonly" %}
 {% if not salt['grains.has_value']('systemd') %}
 openvpn_service:
   service.running:
@@ -28,4 +29,5 @@ openvpn_service:
     - enable: True
     - require:
       - pkg: openvpn_pkgs
+{% endif %}
 {% endif %}
