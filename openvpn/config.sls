@@ -24,7 +24,9 @@ openvpn_{{name}}_service:
 openvpn_config_{{ type }}_{{ name }}:
   file.managed:
 {%- if config.config_type is defined and config.config_type == "profileonly" %}
-    - name: {{ map.conf_dir }}/{{name}}.ovpn
+    - name: {{ map.conf_dir }}/clients/{{name}}.ovpn
+{%- else %}
+    - name: {{ map.conf_dir }}/{{name}}.conf
 {%- endif %}
     - source: salt://openvpn/files/{{ type }}.jinja
     - template: jinja
