@@ -9,7 +9,7 @@ include:
 
 # If the os is using systemd, then each openvpn config has its own service
 # e.g for office.conf -> openvpn@office
-{%- if config.config_type is defined and config.config_type != "profileonly" %}
+{%- if config.config_type is not defined or config.config_type != "profileonly" %}
 {%- if salt['grains.has_value']('systemd') %}
 openvpn_{{name}}_service:
   service.running:
@@ -33,7 +33,7 @@ openvpn_config_{{ type }}_{{ name }}:
         config: {{ config }}
         user: {{ map.user }}
         group: {{ map.group }}
-{%- if config.config_type is defined and config.config_type != "profileonly" %}
+{%- if config.config_type is not defined or config.config_type != "profileonly" %}
     - watch_in:
 {%- if salt['grains.has_value']('systemd') %}
       - service: openvpn_{{name}}_service
