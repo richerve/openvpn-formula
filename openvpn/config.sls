@@ -29,11 +29,13 @@ openvpn_config_{{ type }}_{{ name }}:
         config: {{ config }}
         user: {{ map.user }}
         group: {{ map.group }}
+{%- if config.config_type != "profileonly" %}
     - watch_in:
 {%- if salt['grains.has_value']('systemd') %}
       - service: openvpn_{{name}}_service
 {%- else %}
       - service: openvpn_service
+{%- endif %}
 {%- endif %}
 
 {% if config.ca is defined and config.ca_content is defined %}
