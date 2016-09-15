@@ -5,6 +5,8 @@ client
 
 {%- if config.dev is defined %}
 dev {{ config.dev }}
+{%- else %}
+dev tun
 {%- endif %}
 
 {%- if config.dev_node is defined %}
