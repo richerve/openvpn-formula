@@ -46,13 +46,17 @@ nobind
 {%- endif %}
 
 {%- if config.user is defined %}
+  {%- if config.user != 'none' %}
 user {{ config.user }}
+  {%- endif %}
 {%- else %}
 user {{ user }}
 {%- endif %}
 
 {%- if config.group is defined %}
+  {%- if config.group != 'none' %}
 group {{ config.group }}
+  {%- endif %}
 {%- else %}
 group {{ group }}
 {%- endif %}
