@@ -24,7 +24,7 @@ openvpn_{{name}}_service:
 openvpn_config_{{ type }}_{{ name }}:
   file.managed:
 {%- if config.config_type is defined and config.config_type == "profileonly" %}
-    - name: {{ map.conf_dir }}/clients/{{name}}.ovpn
+    - name: {{ map.conf_dir }}/clients/{{name}}.client
 {%- else %}
     - name: {{ map.conf_dir }}/{{name}}.conf
 {%- endif %}
@@ -42,6 +42,15 @@ openvpn_config_{{ type }}_{{ name }}:
 {%- else %}
       - service: openvpn_service
 {%- endif %}
+{%- endif %}
+
+{%- if config.config_type is defined and config.config_type == "profileonly" %}
+embedded_profile_{{name}}:
+  cmd.wait:
+    - name: sed -e '/ca .*/{s//<ca>/' -e 'r timmy_ca.crt' -e 'a\</ca>' -e '}' -e '/cert .*\.crt/{s//<cert>/' -e 'r {{name}}.crt' -e 'a\</cert>' -e '}' -e '/key .*/{s//<key>/' -e 'r {{name}}.key' -e 'a\</key>' -e '}' {{name}}.client > {{name}}.ovpn
+    - cwd: {{ map.conf_dir }}/clients
+    - watch:
+      - file: openvpn_config_{{ type }}_{{ name }}
 {%- endif %}
 
 {% if config.ca is defined and config.ca_content is defined %}
