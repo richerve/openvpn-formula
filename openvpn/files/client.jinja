@@ -29,6 +29,10 @@ remote {{ remote }}
 auth {{ config.auth }}
 {%- endif %}
 
+{%- if config.auth_user_pass is defined %}
+auth-user-pass
+{%- endif %}
+
 {%- if config.remote_random is defined %}
 remote-random
 {%- endif %}
